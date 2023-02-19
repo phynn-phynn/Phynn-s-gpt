@@ -108,9 +108,8 @@ body {
 }
 
 /* hides scrollbar */
-/*.message::-webkit-scrollbar {
-  display: none;
-}*/
+.message::-webkit-scrollbar {
+
 
 form {
   width: 100%;

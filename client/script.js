@@ -6,8 +6,6 @@ const form = document.querySelector('form');
 const chatContainer = document.querySelector('#chat_container');
 const darkModeToggle = document.querySelector('#dark_mode_toggle');
 const appContainer = document.querySelector('#app');
-const navToggle = document.getElementById('nav_toggle');
-const navPanel = document.getElementById('nav_panel');
 
 let loadInterval;
 
@@ -121,33 +119,3 @@ darkModeToggle.addEventListener('click', () => {
   appContainer.classList.toggle('dark-mode');
 });
 
-const navToggle = document.getElementById('nav_toggle');
-const navPanel = document.getElementById('nav_panel');
-
-navToggle.addEventListener('click', () => {
-  navPanel.classList.toggle('active');
-});
-const navToggle = document.getElementById('nav_toggle');
-const navPanel = document.getElementById('nav_panel');
-
-let isTouchDevice = false;
-
-// Check if device is touch-enabled
-if ('ontouchstart' in document.documentElement) {
-  isTouchDevice = true;
-}
-
-// Show nav panel on hover/click and hold
-navToggle.addEventListener(isTouchDevice ? 'touchstart' : 'mouseenter', () => {
-  navPanel.classList.add('active');
-});
-
-// Hide nav panel when user releases the touch/click
-navToggle.addEventListener(isTouchDevice ? 'touchend' : 'mouseleave', () => {
-  navPanel.classList.remove('active');
-});
-
-// Show nav panel permanently on click
-navToggle.addEventListener('click', () => {
-  navPanel.classList.toggle('active');
-});

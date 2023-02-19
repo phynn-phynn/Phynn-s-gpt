@@ -1,11 +1,5 @@
-<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-  <circle cx="100" cy="100" r="95" fill="#fff" stroke="#000" stroke-width="10"/>
-  <path id="sun" d="M50 100a50 50 0 1 0 100 0 50 50 0 1 0-100 0z" fill="#F2BB11"/>
-  <path id="moon" d="M150 100a50 50 0 1 0-100 0 50 50 0 1 0 100 0z" fill="#373737"/>
-  <rect x="100" y="0" width="100" height="200" fill="#000">
-    <animate attributeType="XML" attributeName="opacity" from="1" to="0" dur="1s" repeatCount="indefinite" begin="night.begin" />
-    <animate attributeType="XML" attributeName="opacity" from="0" to="1" dur="1s" repeatCount="indefinite" begin="day.begin" />
-  </rect>
-  <use href="#sun" id="day" />
-  <use href="#moon" id="night" />
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+  <circle cx="12" cy="12" r="10" fill="#000"/>
+  <circle cx="12" cy="12" r="8" fill="#fff"/>
+  <path d="M12 2v4m0 12v4m-6-6h4m12 0h-4M5.5 12c0-3.58 2.5-6.54 5.84-7.34m12.32 0c-3.34.8-5.84 3.76-5.84 7.34 0 3.58 2.5 6.54 5.84 7.34m-12.32 0c3.34-.8 5.84-3.76 5.84-7.34 0-3.58-2.5-6.54-5.84-7.34"/>
 </svg>

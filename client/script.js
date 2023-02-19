@@ -118,3 +118,10 @@ form.addEventListener('keyup', (e) => {
 darkModeToggle.addEventListener('click', () => {
   appContainer.classList.toggle('dark-mode');
 });
+
+const navToggle = document.getElementById('nav_toggle');
+const navPanel = document.getElementById('nav_panel');
+
+navToggle.addEventListener('click', () => {
+  navPanel.classList.toggle('active');
+});

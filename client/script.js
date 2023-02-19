@@ -1,5 +1,6 @@
 import bot from './assets/bot.svg';
 import user from './assets/user.svg';
+import darkmode from './assets/darkmode.svg';
 
 const form = document.querySelector('form');
 const chatContainer = document.querySelector('#chat_container');
@@ -101,7 +102,7 @@ const handleSubmit = async (e) => {
   } else {
     const err = await response.text();
 
-    messageDiv.innerHTML = "Omohh, e be like say small issue dey o!, Hol'up abeg, make I tell Phynn.";
+    messageDiv.innerHTML = "Omohh, e be like say small quanta dey o!, Hol'up abeg, make I tell Phynn..we go fix am asap!";
 
     alert(err);
   }

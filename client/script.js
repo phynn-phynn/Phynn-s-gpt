@@ -3,26 +3,28 @@ import user from './assets/user.svg';
 
 const form = document.querySelector('form');
 const chatContainer = document.querySelector('#chat_container');
+const darkModeToggle = document.querySelector('#dark_mode_toggle');
+const appContainer = document.querySelector('#app');
 
 let loadInterval;
 
-
 function loader(element) {
-element.textContent = '';
+  element.textContent = '';
 
-loadInterval = setInterval(() => {
-  element.textContent += '.';
+  loadInterval = setInterval(() => {
+    element.textContent += '.';
 
-  if (element.textContent === '....'){
-    element.textContent = '';
-  }
- }, 300)
+    if (element.textContent === '....') {
+      element.textContent = '';
+    }
+  }, 300)
 }
+
 function typeText(element, text) {
   let index = 0;
 
   let interval = setInterval(() => {
-    if(index < text.length) {
+    if (index < text.length) {
       element.innerHTML += text.charAt(index);
       index++;
     } else {
@@ -39,7 +41,7 @@ function generateUniqueId() {
   return `id-${timestamp}-${hexadecimalString}`;
 }
 
-function chatStripe (isAi, value, uniqueId) {
+function chatStripe(isAi, value, uniqueId) {
   return (
     `
       <div class="wrapper ${isAi && 'ai'}">
@@ -64,35 +66,34 @@ const handleSubmit = async (e) => {
 
   //user's chatStripe
   chatContainer.innerHTML += chatStripe(false, data.get('prompt'));
-  
+
   form.reset();
 
   //bot's chatStripe
   const uniqueId = generateUniqueId();
   chatContainer.innerHTML += chatStripe(true, " ", uniqueId);
 
-  chatContainer.scrollTop =chatContainer.scrollHeight;
+  chatContainer.scrollTop = chatContainer.scrollHeight;
 
   const messageDiv = document.getElementById(uniqueId);
 
   loader(messageDiv);
 
   // fetch data from server -> bot's response
-
   const response = await fetch('https://phynnsgpt.onrender.com', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json'
-  },
-  body: JSON.stringify({
-    prompt: data.get('prompt')
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      prompt: data.get('prompt')
+    })
   })
-})
 
   clearInterval(loadInterval);
   messageDiv.innerHTML = '';
 
-  if(response.ok) {
+  if (response.ok) {
     const data = await response.json();
     const parsedData = data.bot.trim();
 
@@ -111,4 +112,8 @@ form.addEventListener('keyup', (e) => {
   if (e.keyCode === 13) {
     handleSubmit(e);
   }
-})
+});
+
+darkModeToggle.addEventListener('click', () => {
+  appContainer.classList.toggle('dark-mode');
+});

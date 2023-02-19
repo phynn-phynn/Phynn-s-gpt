@@ -133,18 +133,4 @@ textarea {
   padding: 10px;
   background: transparent;
   border-radius: 5px;
-  border: none;
-  outline: none;
-}
-
-button {
-  outline: 0;
-  border: 0;
-  cursor: pointer;
-  background: transparent;
-}
-
-form img {
-  width: 30px;
-  height: 30px;
-}
+  border:

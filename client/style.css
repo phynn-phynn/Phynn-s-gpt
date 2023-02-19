@@ -148,3 +148,39 @@ form img {
   width: 30px;
   height: 30px;
 }
+/* Dark mode styles */
+body.dark-mode {
+  background: #0d1117;
+}
+
+#app.dark-mode {
+  background: #0d1117;
+}
+
+.ai.dark-mode .profile {
+  background: #32c37f;
+}
+
+.chat.dark-mode .profile {
+  background: #7f32c3;
+}
+
+form.dark-mode {
+  background: #21262d;
+}
+
+textarea.dark-mode {
+  background: #21262d;
+  color: #fff;
+}
+
+.message.dark-mode {
+  color: #fff;
+}
+
+#dark_mode_toggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+}

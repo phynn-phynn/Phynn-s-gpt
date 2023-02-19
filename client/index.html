@@ -9,20 +9,14 @@
   </head>
   <body>
     <div id="app">
-      <button id="nav_toggle" aria-label="Toggle Navigation">☰</button>
-      <nav id="nav_panel">
-        <ul>
-          <li><a href="#">Home</a></li>
-          <li><a href="#">About</a></li>
-          <li><a href="#">Services</a></li>
-          <li><a href="#">Contact</a></li>
-        </ul>
-      </nav>
-
+        <button id="nav_toggle" aria-label="Toggle Navigation">☰</button>
+        <nav id="nav_panel">
+          <!-- Navigation links here -->
+        </nav>
+        <!-- Rest of your app code here -->
       <button id="dark_mode_toggle" aria-label="Toggle Dark Mode">
         <img src="assets/darkmode.svg" alt="Dark Mode Icon">
       </button>
-
       <div id="chat_container"></div>
 
       <form>
@@ -32,21 +26,6 @@
     </div>
 
     <script type="module" src="script.js"></script>
-
-    <script>
-      const navToggle = document.getElementById('nav_toggle');
-      const navPanel = document.getElementById('nav_panel');
-      const navLinks = document.querySelectorAll('#nav_panel a');
-
-      navToggle.addEventListener('click', () => {
-        navPanel.classList.toggle('active');
-      });
-
-      navLinks.forEach(link => {
-        link.addEventListener('click', () => {
-          navPanel.classList.remove('active');
-        });
-      });
-    </script>
   </body>
 </html>
+

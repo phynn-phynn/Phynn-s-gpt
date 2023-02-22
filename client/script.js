@@ -6,6 +6,8 @@ const form = document.querySelector('form');
 const chatContainer = document.querySelector('#chat_container');
 const darkModeToggle = document.querySelector('#dark_mode_toggle');
 const appContainer = document.querySelector('#app');
+const scrollToTopButton = document.querySelector('.scroll-to-top');
+const scrollToBottomButton = document.querySelector('.scroll-to-bottom');
 
 let loadInterval;
 
@@ -119,3 +121,13 @@ darkModeToggle.addEventListener('click', () => {
   appContainer.classList.toggle('dark-mode');
 });
 
+
+/*
+scrollToTopButton.addEventListener('click', function() {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+scrollToBottomButton.addEventListener('click', function() {
+  window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+});
+*/

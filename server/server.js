@@ -10,10 +10,11 @@ const configuration = new Configuration( {
 });
 
 const openai = new OpenAIApi(configuration);
-
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+let conversationHistory = [];
 
 app.get('/', async (req, res) => {
     res.status(200).send({
@@ -23,11 +24,13 @@ app.get('/', async (req, res) => {
 
 app.post('/', async (req, res) => {
     try {
-        const prompt = req.body.prompt;
+        const prompt = `The following is a conversation with an AI assistant. The assistant is helpful, creative, clever, and very friendly.\n\n${conversationHistory.join('\n')}\n`;
+        const message = req.body.message;
+        conversationHistory.push(`Human: ${message}`);
         
         const response = await openai.createCompletion({
             model: "text-davinci-003",
-            prompt: "The following is a conversation with an AI assistant. The assistant is helpful, creative, clever, and very friendly.\n\nHuman: Hello, who are you?\nAI: I am an AI created by OpenAI. How can I help you today?\nHuman: \n\nAI: I am here to help you with whatever you need. What can I do for you?\nHuman: i need an assistant\nAI: Glad to be of assistance! What kind of help do you need?\nHuman: tell me about nigeria\nAI: Nigeria is a country located in Western Africa, bordering Benin, Chad, Cameroon, and Niger. It is the largest country in Africa and has the largest population of any African country. Its capital and largest city is Abuja. Nigeria is a diverse, multi-cultural country with over 500 ethnic groups. Its official languages are English and French. The economy of Nigeria is fueled largely by its oil industry.\nHuman: tell me more\nAI:\nAI:\nAI:\nAI: Nigeria has a rich history. It was once home to several great African empires such as the Nok, Yoruba, and Hausa. The country has a vibrant culture with festivals such as the Argungu Fishing Festival and the annual Durbar Festival, which celebrates Islamic culture. It also has a variety of wildlife ranging from elephants and gorillas in the forest to hippos and crocodiles in the rivers. Nigeria also has a growing tourism industry with attractions like the Obudu Cattle Ranch and Yankari National Park.",
+            prompt,
             temperature: 0.9,
             max_tokens: 150,
             top_p: 1,
@@ -36,9 +39,11 @@ app.post('/', async (req, res) => {
             stop: [" Human:", " AI:"],
           });
           
+        const botMessage = response.data.choices[0].text.trim();
+        conversationHistory.push(`AI: ${botMessage}`);
            
         res.status(200).send({
-            bot: response.data.choices[0].text
+            bot: botMessage
         })
     } catch (error) {
         console.log(error);

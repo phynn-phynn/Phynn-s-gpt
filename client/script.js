@@ -1,7 +1,7 @@
 import bot from './assets/bot.svg';
 import user from './assets/user.svg';
-import darkmode from './assets/darkmode.svg';
-
+/*import darkmode from './assets/darkmode.svg';
+*/
 const form = document.querySelector('form');
 const chatContainer = document.querySelector('#chat_container');
 const darkModeToggle = document.querySelector('#dark_mode_toggle');
@@ -116,7 +116,7 @@ form.addEventListener('keyup', (e) => {
     handleSubmit(e);
   }
 });
-
+/*
 darkModeToggle.addEventListener('click', () => {
   appContainer.classList.toggle('dark-mode');
 });

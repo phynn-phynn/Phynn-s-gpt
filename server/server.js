@@ -2,6 +2,7 @@ import express from 'express';
 import * as dotenv from 'dotenv';
 import cors from 'cors';
 import { Configuration, OpenAIApi } from 'openai';
+import Redis from 'ioredis';
 
 dotenv.config();
 
@@ -14,7 +15,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-let conversationHistory = [];
+const redisClient = new Redis(process.env.REDIS_URL);
 
 app.get('/', async (req, res) => {
   res.status(200).send({
@@ -24,10 +25,16 @@ app.get('/', async (req, res) => {
 
 app.post('/', async (req, res) => {
   try {
+    const message = req.body.message;
+    const conversationId = req.body.conversationId || '';
+
+    let conversationHistory = await redisClient.get(`conversation:${conversationId}`);
+    conversationHistory = conversationHistory ? JSON.parse(conversationHistory) : [];
+
     const prompt = `The following is a conversation with an AI assistant. The assistant is helpful, creative, clever, and very friendly.
 
 ${conversationHistory.join('\n')}\n`;
-    const message = req.body.message;
+
     conversationHistory.push(`Human: ${message}`);
 
     const response = await openai.createCompletion({
@@ -44,8 +51,13 @@ ${conversationHistory.join('\n')}\n`;
     const botMessage = response.data.choices[0].text.trim();
     conversationHistory.push(`AI: ${botMessage}`);
 
+    // Store the last 3000 completions in Redis
+    const conversationHistoryJSON = JSON.stringify(conversationHistory.slice(-3000));
+    await redisClient.set(`conversation:${conversationId}`, conversationHistoryJSON);
+
     res.status(200).send({
       bot: botMessage,
+      conversationId,
     });
   } catch (error) {
     console.log(error);

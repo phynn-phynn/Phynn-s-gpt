@@ -5,7 +5,11 @@ import { Configuration, OpenAIApi } from 'openai';
 
 dotenv.config();
 
-const openai = new OpenAIApi(process.env.OPENAI_API_KEY);
+const configuration = new Configuration({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+
+const openai = new OpenAIApi(configuration);
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -20,24 +24,24 @@ app.get('/', async (req, res) => {
 
 app.post('/', async (req, res) => {
   try {
-    const messages = [
-      { role: 'system', content: 'You are a helpful assistant from phineas.' },
-      { role: 'user', content: req.body.message },
-      { role: 'assistant', content: 'Sure, I can help with that!' },
-    ];
-    const prompt = messages.map(m => `${m.role}: ${m.content}`).join('\n');
+    const prompt = `The following is a conversation with an AI assistant. The assistant is helpful, creative, clever, and very friendly.
 
-    const response = await openai.Completion.create({
+${conversationHistory.join('\n')}\n`;
+    const message = req.body.message;
+    conversationHistory.push(`Human: ${message}`);
+
+    const response = await openai.createCompletion({
       model: 'text-davinci-003',
       prompt,
-      temperature: 0.7,
-      max_tokens: 3000,
+      temperature: 0.9,
+      max_tokens: 150,
       top_p: 1,
-      frequency_penalty: 0.5,
-      presence_penalty: 0,
+      frequency_penalty: 0,
+      presence_penalty: 0.6,
+      stop: [' Human:', ' AI:'],
     });
 
-    const botMessage = response.choices[0].text.trim();
+    const botMessage = response.data.choices[0].text.trim();
     conversationHistory.push(`AI: ${botMessage}`);
 
     res.status(200).send({

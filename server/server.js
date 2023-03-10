@@ -2,20 +2,15 @@ import express from 'express';
 import * as dotenv from 'dotenv';
 import cors from 'cors';
 import { Configuration, OpenAIApi } from 'openai';
-import Redis from 'ioredis';
 
 dotenv.config();
 
-const configuration = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-
-const openai = new OpenAIApi(configuration);
+const openai = new OpenAIApi(process.env.OPENAI_API_KEY);
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-const redisClient = new Redis(process.env.REDIS_URL);
+let conversationHistory = [];
 
 app.get('/', async (req, res) => {
   res.status(200).send({
@@ -25,39 +20,28 @@ app.get('/', async (req, res) => {
 
 app.post('/', async (req, res) => {
   try {
-    const message = req.body.message;
-    const conversationId = req.body.conversationId || '';
+    const messages = [
+      { role: 'system', content: 'You are a helpful assistant from phineas.' },
+      { role: 'user', content: req.body.message },
+      { role: 'assistant', content: 'Sure, I can help with that!' },
+    ];
+    const prompt = messages.map(m => `${m.role}: ${m.content}`).join('\n');
 
-    let conversationHistory = await redisClient.get(`conversation:${conversationId}`);
-    conversationHistory = conversationHistory ? JSON.parse(conversationHistory) : [];
-
-    const prompt = `The following is a conversation with an AI assistant. The assistant is helpful, creative, clever, and very friendly.
-
-${conversationHistory.join('\n')}\n`;
-
-    conversationHistory.push(`Human: ${message}`);
-
-    const response = await openai.createCompletion({
+    const response = await openai.Completion.create({
       model: 'text-davinci-003',
       prompt,
-      temperature: 0.9,
-      max_tokens: 150,
+      temperature: 0.7,
+      max_tokens: 3000,
       top_p: 1,
-      frequency_penalty: 0,
-      presence_penalty: 0.6,
-      stop: [' Human:', ' AI:'],
+      frequency_penalty: 0.5,
+      presence_penalty: 0,
     });
 
-    const botMessage = response.data.choices[0].text.trim();
+    const botMessage = response.choices[0].text.trim();
     conversationHistory.push(`AI: ${botMessage}`);
-
-    // Store the last 3000 completions in Redis
-    const conversationHistoryJSON = JSON.stringify(conversationHistory.slice(-3000));
-    await redisClient.set(`conversation:${conversationId}`, conversationHistoryJSON);
 
     res.status(200).send({
       bot: botMessage,
-      conversationId,
     });
   } catch (error) {
     console.log(error);
